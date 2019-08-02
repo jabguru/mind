@@ -43,7 +43,18 @@ INSTALLED_APPS = [
     'pages',
     'accounts',
     'projects',
+    'crispy_forms',
+
+
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.facebook',
 ]
+
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -136,3 +147,38 @@ from django.contrib.messages import constants as messages
 MESSAGE_TAGS = {
 messages.ERROR: 'danger'
 }
+
+#ALLAUTH SETTINGS
+LOGIN_REDIRECT_URL = '/accounts/dashboard'
+SITE_ID = 1
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
+ACCOUNT_AUTHENTICATION_METHOD = "username_email"
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
+ACCOUNT_FORMS = {
+'signup': 'accounts.forms.CustomSignupForm',
+}
+
+ACCOUNT_ADAPTER = 'accounts.forms.UserAccountAdapter'
+SOCIALACCOUNT_AUTO_SIGNUP = False
+
+DEFAULT_FROM_EMAIL = 'rasholayemi@gmail.com'
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'rasholayemi@gmail.com'
+EMAIL_HOST_PASSWORD = 'oladimeji'
+
+if DEBUG:
+    SITE_URL = 'http://localhost:8000'
+if not DEBUG:
+    SITE_URL = 'http://interswitch.com'

@@ -13,4 +13,5 @@ urlpatterns = [
     path('issues', views.issues, name='issues'),
     path('<int:project_id>/create_issue', views.create_issue, name='create_issue' ),
     path('issue/<int:issue_id>', views.issue, name='issue' ),
+    path('s/', views.search, name='search'),
 ]

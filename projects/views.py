@@ -23,9 +23,16 @@ def create(request):
         project.save()
 
         messages.success(request, 'Project successfully created!')
-        redirect ('dashboard')
+        return redirect ('dashboard')
         
     return render(request, 'projects/create.html')
+
+def project(request, project_id):
+    project = get_object_or_404(Project, pk=project_id)
+    context ={
+
+    }
+    return render(request, 'projects/project.html', context)
 
 def projects(request):
     all_projects = Project.objects.all().order_by('-startdate')
@@ -40,12 +47,14 @@ def projects(request):
 
 def assign_project(request, project_id):
     project = get_object_or_404(Project, pk=project_id)
+    
     if request.POST:
         team = request.POST['team']
         team = Team.objects.get(id=team)
         project.team = team
         project.save()
         messages.success(request, 'Project successfully assigned!')
+        return redirect('dashboard')
 
 
     teams = Team.objects.all()
@@ -117,6 +126,7 @@ def delete_project(request, project_id):
 
 def update_project(request, project_id):
     project = get_object_or_404(Project, pk=project_id)
+    teams = Team.objects.all()
 
     if request.POST:
         project.title = request.POST['title']
@@ -124,6 +134,9 @@ def update_project(request, project_id):
         project.point = request.POST['point']
         project.startdate = request.POST['startdate']
         project.deadline = request.POST['deadline']
+        team = request.POST['team']
+
+        project.team = Team.objects.get(id=team)
 
         if 'attachment' in request.FILES:
             project.attachment = request.FILES['attachment']
@@ -134,7 +147,7 @@ def update_project(request, project_id):
         redirect ('dashboard')
 
     context = {
-        'project':project
+        'project':project, 'teams':teams,
     }
     return render(request, 'projects/edit-project.html', context)
 
@@ -171,4 +184,9 @@ def issue(request, issue_id):
     }
     return render(request, 'projects/issue.html', context)
     
-
+def search(request):
+	query = request.GET['query']
+	project = Project.objects.filter(title__icontains=query)|Project.objects.filter(description__icontains=query)
+	template = 'projects/results.html'
+	context =  {'query': query, 'projects':project}
+	return render(request, template, context)

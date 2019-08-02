@@ -19,8 +19,6 @@ def leaderboard(request):
     for key,val in zip(position,teams):
         dictionary[key] = val
 
-    print(dictionary)
-
     context = {
         'teams': teams, 'dictionary':dictionary,
     }
