@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from accounts.models import Team
 from django.contrib.auth.models import User
 from django.contrib import messages
-from projects.models import Project, Issue
+from projects.models import Project, Issue, Feedback
 
 #YEMI
 import re 
@@ -11,15 +11,28 @@ from .forms import UserRegisterForm, UserUpdateForm #ProfileUpdateForm
 from django.contrib.auth.decorators import login_required
 from accounts.models import EmailConfirmed, UserProfile
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+@login_required
 def dashboard(request):
     all_teams = Team.objects.all()
     all_issues = Issue.objects.all().order_by("-post_date")
     all_projects = Project.objects.all()[:5]
     projects = Project.objects.all()
 
+    user = request.user
+    user_team = user.userprofile.team
+
+    team_feedbacks = Feedback.objects.filter(team=user_team).order_by('-post_date')
+
+
+    team_projects = Project.objects.filter(team=user_team)
+    # user_team = Team.objects.get(members=user)
+    # print(user_team)
     completed_projects = Project.objects.filter(is_accepted=True)
+
+    
 
     projects_counter = 0
     for project in projects:
@@ -29,9 +42,6 @@ def dashboard(request):
     for project in completed_projects:
         completed_counter+=1
 
-    # projects = len(projects)
-    # completed_projects = len(projects)
-
     if not projects_counter == 0:
         completed_percent = int((completed_counter/projects_counter)*100)
         ongoing_percent = int(100 - completed_percent)
@@ -40,6 +50,29 @@ def dashboard(request):
         ongoing_percent = 0
 
     ongoing_counter = projects_counter - completed_counter
+    
+    
+    team_completed_projects = team_projects.filter(is_accepted=True)
+
+    team_projects_counter = 0
+    for project in team_projects:
+        team_projects_counter+=1
+
+    team_completed_counter = 0
+    for project in team_completed_projects:
+        team_completed_counter+=1
+
+    if not team_projects_counter == 0:
+        team_completed_percent = int((team_completed_counter/team_projects_counter)*100)
+        team_ongoing_percent = int(100 - team_completed_percent)
+    else:
+        team_completed_percent = 0
+        team_ongoing_percent = 0
+
+    team_ongoing_counter = team_projects_counter - team_completed_counter
+
+    issues = Issue.objects.all().order_by('-post_date')
+
 
     context = {   
         'all_teams':all_teams, 'all_projects':all_projects,
@@ -48,6 +81,14 @@ def dashboard(request):
         'ongoing_percent': ongoing_percent,
         'completed_counter': completed_counter,
         'ongoing_counter': ongoing_counter,
+        'team_completed_percent': team_completed_percent,
+        'team_ongoing_percent': team_ongoing_percent,
+        'team_completed_counter': team_completed_counter,
+        'team_ongoing_counter': team_ongoing_counter,
+        'user_team': user_team,
+        'team_projects': team_projects,
+        'issues':issues,
+        'team_feedbacks':team_feedbacks,
      }
     return render(request, 'accounts/dashboard.html', context)
 
@@ -65,6 +106,9 @@ def create_team(request):
         for member in members:
             user = User.objects.get(username=member)
             team.members.add(user)
+            profile = user.userprofile
+            profile.team = team
+            profile.save()
 
         team.save()
 
@@ -79,8 +123,9 @@ def create_team(request):
     return render(request, 'accounts/create-team.html', context)
 
 def manage_teams(request):
+    teams = Team.objects.all()
     context ={
-
+        'teams':teams
     }
     return render(request, 'accounts/manage-teams.html', context)
 
@@ -172,6 +217,9 @@ def update_team(request, team_id):
         for member in members:
             user = User.objects.get(username=member)
             team.members.add(user)
+            profile = user.userprofile
+            profile.team = team
+            profile.save()
 
         team.save()
 

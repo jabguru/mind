@@ -5,6 +5,7 @@ from projects import views
 urlpatterns = [
     path('create', views.create, name='create_project' ),
     path('', views.projects, name='projects' ),
+    path('<int:project_id>', views.project, name='project' ),
     path('<int:project_id>/assign_project', views.assign_project, name='assign_project' ),
     path('<int:project_id>/submit_project', views.submit_project, name='submit_project' ),
     path('<int:project_id>/confirm_project', views.confirm_project, name='confirm_project' ),
@@ -14,4 +15,8 @@ urlpatterns = [
     path('<int:project_id>/create_issue', views.create_issue, name='create_issue' ),
     path('issue/<int:issue_id>', views.issue, name='issue' ),
     path('s/', views.search, name='search'),
+    path('team/<int:team_id>', views.team_projects, name='team_projects'),
+    path('<int:project_id>/solution', views.solution, name='solution'),
+    path('<int:team_id>/feedback',views.create_feedback, name='create_feedback'),
+    path('feedback/<int:feedback_id>',views.feedback, name='feedback'),
 ]

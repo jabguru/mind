@@ -7,17 +7,19 @@
         {% if projects %}
 					{% for project in projects %}
 					
-					<div class="col-md-3 col-lg-3 mb-4 text-center">
-						<div class="product-entry border">
-							<div class="desc">
-								<h2><a href="{% url 'projects' %}">{{project.title}}</a></h2>
-								<span class="price"> {{project.description|truncatewords:15}}...<a href="{% url 'projects' %}">read more</a></span>
+					<div class="card col-md-3 p-card" >
+                    <div class="card-body task-body">
+                        <h5 class="card-header-title font-weight-bold">{{project}}</h5>
+                        <hr>
+                        {{project.description|truncatewords:20}}
+                        <div class="task-btns">
+                        <a href="{% url 'update_project' project.id %}" class="btn-style-2">Edit Project</a>
+                        <a href="{% url 'assign_project' project.id %}" class="btn-style-2">Assign Project</a>
+                        <a href="{% url 'delete_project' project.id %}" class="btn-style-2">Delete Project</a>
+                        </div>
+                    </div>
+                    </div>
 
-
-
-							</div>
-						</div>
-					</div>
 					{% endfor %}
 					{% else %}
 					<div class="col-md-3 col-lg-3 mb-4 text-center">

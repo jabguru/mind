@@ -27,6 +27,7 @@ class Team(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(User, related_name='userprofile', null=True, on_delete=models.CASCADE)
     position = models.CharField(max_length=255, null=True)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE, null=True, related_name='userprofile')
     is_line_manager = models.BooleanField(default=False,null=False)
     is_program_manager = models.BooleanField(default=False,null=False)
 
@@ -46,7 +47,7 @@ class EmailConfirmed(models.Model):
 
     def activate_user_email(self):
         #send email
-        activation_url = '{}/{}'.format(settings.SITE_URL, reverse('activation_view', args=[self.activation_key]))
+        activation_url = '{}{}'.format(settings.SITE_URL, reverse('activation_view', args=[self.activation_key]))
         context = {
             'activation_key': self.activation_key,
             'activation_url': activation_url,

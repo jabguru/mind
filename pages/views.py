@@ -1,9 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from accounts.models import Team
+from projects.models import Project, Issue
 
 # Create your views here.
 def index(request):
-    return render(request, 'pages/index.html')
+    # return render(request, 'pages/index.html')
+    return redirect('dashboard')
 
 def leaderboard(request):
     teams = Team.objects.all().order_by('-totalPoints')
@@ -25,7 +27,15 @@ def leaderboard(request):
     return render(request, 'pages/leaderboard.html', context)
 
 def notifications(request):
+    projects = Project.objects.filter(is_submitted=True)
+    projects_counter = len(projects)
+    issues = Issue.objects.all().order_by("-post_date")
+    issues_counter = len(issues)
+    
     context = {
-        
+        'projects':projects,
+        'projects_counter':projects_counter,
+        'issues_counter': issues_counter,
+        'issues': issues
     }
     return render(request, 'pages/notifications.html', context)
