@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 
+{% block title %}| Create Project{% endblock title %}
 {% block content %}
   <div class="container container-fluid">
         <h5 class="mt-4 page-title">CREATE PROJECT</h5>
@@ -24,8 +25,8 @@
                   <span>Start date and time: <input type="datetime-local" name="startdate" class="form-control"></span>
                   <span>End date and time: <input type="datetime-local" name="deadline" class="form-control"></span>
             </div>
-            <div class="submit-section">
-                <input type="submit" class="btn-style-2" value="CREATE">
+            <div class="submit-section my-5">
+                <input type="submit" class=" btn btn-style-2" value="CREATE">
             </div>
           </form>
         </div>

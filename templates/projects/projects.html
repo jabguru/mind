@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 
+{% block title %}| Projects{% endblock title %}
 {% block content %}
     <div class="main-content">
       <div class="container container-fluid"> 
@@ -50,7 +51,7 @@
                     
                     {% for project in active_projects  %}
                         
-                    <div class="card col-md-3 p-card" >
+                    <div class="card col-md-4 p-card" >
                     <div class="card-body task-body">
                         <h5 class="card-header-title font-weight-bold">{{project}}</h5>
                         <hr>
@@ -72,7 +73,7 @@
                     
                     {% for project in accepted_projects  %}
                         
-                    <div class="card col-md-3 p-card" >
+                    <div class="card col-md-4 p-card" >
                     <div class="card-body task-body">
                         <h5 class="card-header-title font-weight-bold">{{project}}</h5>
                         <hr>

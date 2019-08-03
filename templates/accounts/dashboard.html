@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 
 
+{% block title %}| Dashboard{% endblock title %}
+  
 {% block content %}
      {% include 'partials/alerts.html' %}
 
@@ -15,7 +17,7 @@
               <div class="dash-page-head">
                 <div class="dash-team-span">Teams Projects</div>
                 <div class="dash-head-buttons">
-                  <a class="btn btn-style-2" id="awesome-tab-classic" href="{% url 'create_project' %}">Create project</a>
+                  <a class="btn btn-style-2" style="padding-bottom: 10px;" id="awesome-tab-classic" href="{% url 'create_project' %}">Create project</a>
                 </div>
               </div>
               <div class="card-body">

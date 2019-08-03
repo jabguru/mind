@@ -10,6 +10,10 @@ h1, h2, h3, h4, h5, h6 {
 
 }
 
+a {
+  text-decoration: none !important;
+}
+
 td {
   font-size: 13px;
 }
@@ -99,9 +103,14 @@ nav.navbar.navbar-expand-lg.navbar-light.bg-light.border-bottom {
 #awesome-tab-classic {
   position: absolute;
   right: 0;
+  background: #164782;
+  color: white !important;
   margin-top: 10px;
   margin-right: 10px;
   border-radius: 5px;
+  padding: 20px 20px;
+  padding-top: 5px !important;
+
 }
 
 .active-tab {
@@ -343,6 +352,20 @@ tbody{
 
 .list-group-item {
   border: none;
+}
+
+div#sidebar-wrapper{
+  height: 100%;
+  width: 240px;
+  position: fixed;
+  z-index: 200;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+}
+
+#page-content-wrapper{
+  margin-left: 240px;
 }
 
 @media (max-width: 768px) {
