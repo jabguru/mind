@@ -5,7 +5,7 @@
   <div class="container container-fluid">
         <h2 class="mt-4 page-title">ASSIGN PROJECT</h2>
         <div class="create-team">
-            <a href="{% url 'create_team' %}" class="btn-style-1">create new team</a>
+            <a href="{% url 'create_team' %}" class="btn btn-style-1">Create Team</a>
           </div> 
         (Project - {{project.title}} )  
         <br>
@@ -18,7 +18,7 @@
                 <th scope="col">Assign</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody style="height: 600px !important;">
               
               {% if teams %}
               {% for team in teams %}
@@ -30,7 +30,7 @@
                   <form action="{% url 'assign_project' project.id %}" method="POST">
                     {% csrf_token %}
                     <input type="hidden" name="team" value="{{team.id}}">
-                    <button type="submit" class="btn-style-1">Assign</button>
+                    <button type="submit" class="btn btn-style-1">Assign</button>
                   </form>
                 </td>
               </tr>

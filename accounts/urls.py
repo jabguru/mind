@@ -9,6 +9,7 @@ from .views import register,dashboard, activation_view
 
 urlpatterns = [
     path('dashboard', views.dashboard, name='dashboard'),
+    path('no_team', views.no_team, name='no_team'),
     path('create_team', views.create_team, name='create_team'),
     path('manage_teams', views.manage_teams, name='manage_teams'),
     path('teams/<int:team_id>', views.team, name='team'),
@@ -16,7 +17,7 @@ urlpatterns = [
     path('teams/<int:team_id>/update_team', views.update_team, name='update_team'),
 
     path('register/', register, name='register'),
-    path('login/', auth_views.LoginView.as_view(template_name='accounts/login.html'), name='login'),
+    path('login/', views.login, name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='accounts/logout.html'), name='logout'),
     path('password-reset/',
         auth_views.PasswordResetView.as_view(

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from accounts.models import Team
 from django.contrib.auth.models import User
-from django.contrib import messages
+from django.contrib import messages, auth
 from projects.models import Project, Issue, Feedback
 
 #YEMI
@@ -13,16 +13,38 @@ from accounts.models import EmailConfirmed, UserProfile
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
-# Create your views here.
+#Create your views here.
+def login(request):
+    if request.method == 'POST':
+        
+        username = request.POST['username']
+        password = request.POST['password']
+
+        user = auth.authenticate(username=username, password=password)
+
+        if user is not None:
+            auth.login(request, user)
+            messages.success(request, 'You are now logged in')
+            return redirect('dashboard')
+        else:
+            messages.error(request, 'Invalid login credentials')
+            return redirect('login')
+        
+    else:
+        return render(request, 'accounts/login.html')
+
 @login_required
 def dashboard(request):
+    user = request.user
+
+    if not user.userprofile.team:
+        return redirect('no_team')
+
+    user_team = user.userprofile.team
     all_teams = Team.objects.all()
     all_issues = Issue.objects.all().order_by("-post_date")
     all_projects = Project.objects.all()[:5]
     projects = Project.objects.all()
-
-    user = request.user
-    user_team = user.userprofile.team
 
     team_feedbacks = Feedback.objects.filter(team=user_team).order_by('-post_date')
 
@@ -92,16 +114,30 @@ def dashboard(request):
      }
     return render(request, 'accounts/dashboard.html', context)
 
+def no_team(request):
+    return render(request, 'accounts/no-team.html')
+
 def create_team(request):
     users = User.objects.all()
     if request.POST:
         name = request.POST['name']
-        members = request.POST.getlist('members')
-        program_manager = request.POST['manager']
+
+        if "members" in request.POST:
+            members = request.POST.getlist('members')
+        else:
+            messages.error(request, 'Please select team members')
+            return redirect('create_team')
+
+        if "manager" in request.POST:
+            program_manager = request.POST['manager']
+        else:
+            messages.error(request, 'Please select a team lead')
+            return redirect('create_team')
 
         program_manager = User.objects.get(username=program_manager)
 
         team = Team.objects.create(name=name, program_manager=program_manager)
+
 
         for member in members:
             user = User.objects.get(username=member)
@@ -110,11 +146,16 @@ def create_team(request):
             profile.team = team
             profile.save()
 
-        team.save()
 
         user = User.objects.get(username=program_manager)
-        user.userprofile.is_program_manager = True
-        user.save()
+
+        if user in team.members.all():
+            user.userprofile.is_program_manager = True
+            user.save()
+            team.save()
+        else:
+            messages.error(request, 'Please select a team lead from the members you selected')
+            return redirect('create_team')
         
         messages.success(request, 'Team successfully created!')
         return redirect("dashboard")
@@ -209,8 +250,17 @@ def update_team(request, team_id):
         user.save()
         
         team.name = request.POST['name']
-        members = request.POST.getlist('members')
-        program_manager = request.POST['manager']
+        if "members" in request.POST:
+            members = request.POST.getlist('members')
+        else:
+            messages.error(request, 'Please select team members')
+            return redirect('update_team', team.id)
+        
+        if "manager" in request.POST:
+            program_manager = request.POST['manager']
+        else:
+            messages.error(request, 'Please select a team lead')
+            return redirect('update_team', team.id)
 
         team.program_manager = User.objects.get(username=program_manager)
 
@@ -221,11 +271,14 @@ def update_team(request, team_id):
             profile.team = team
             profile.save()
 
-        team.save()
-
         user = User.objects.get(username=program_manager)
-        user.userprofile.is_program_manager = True
-        user.save()
+        if user in team.members.all():
+            user.userprofile.is_program_manager = True
+            user.save()
+            team.save()
+        else:
+            messages.error(request, 'Please select a team lead from the members you selected')
+            return redirect('create_team')
         
         messages.success(request, 'Team successfully Updated!')
         return redirect('dashboard')

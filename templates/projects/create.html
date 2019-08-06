@@ -9,21 +9,21 @@
         <form action="{% url 'create_project'%}" method="POST" enctype="multipart/form-data">
           {% csrf_token %}
             <h6 class="font-weight-bold">Project title</h6>
-            <input type="text" class="form-control field" name="title">
+            <input type="text" required class="form-control field" name="title">
             <br>
             <h6 class="font-weight-bold">Project Description</h6>
-            <textarea name="description" id="" cols="30" rows="8" class="form-control field"></textarea>
+            <textarea required name="description" id="" cols="30" rows="8" class="form-control field"></textarea>
             <br>
             <h6 class="font-weight-bold">Project Point</h6>
-            <input type="number" class="form-control field" name="point">
+            <input required type="number" class="form-control field" name="point">
             <br>
             <h6 class="font-weight-bold">Add attachment</h6>
             <input type="file" name="attachment">
             <br><br>
             <h6 class="font-weight-bold">Duration</h6>
             <div class="duration-section">
-                  <span>Start date and time: <input type="datetime-local" name="startdate" class="form-control"></span>
-                  <span>End date and time: <input type="datetime-local" name="deadline" class="form-control"></span>
+                  <span>Start date and time: <input required type="datetime-local" name="startdate" class="form-control"></span>
+                  <span>End date and time: <input required type="datetime-local" name="deadline" class="form-control"></span>
             </div>
             <div class="submit-section my-5">
                 <input type="submit" class=" btn btn-style-2" value="CREATE">

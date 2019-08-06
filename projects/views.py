@@ -24,7 +24,7 @@ def create(request):
         project.save()
 
         messages.success(request, 'Project successfully created!')
-        return redirect ('dashboard')
+        return redirect ('assign_project',project.id)
         
     return render(request, 'projects/create.html')
 
@@ -77,6 +77,7 @@ def assign_project(request, project_id):
         team = request.POST['team']
         team = Team.objects.get(id=team)
         project.team = team
+        project.is_assigned = True
         project.save()
         messages.success(request, 'Project successfully assigned!')
         return redirect('dashboard')
@@ -259,7 +260,7 @@ def search(request):
         team = user.userprofile.team
         team = Team.objects.filter(name__iexact=team)[0]
         project = Project.objects.filter(team=team)
-        project = Project.objects.filter(title__icontains=query)|Project.objects.filter(description__icontains=query)
+        project = project.filter(title__icontains=query)|project.filter(description__icontains=query)
     else:
         project = Project.objects.filter(title__icontains=query)|Project.objects.filter(description__icontains=query)
     template = 'projects/results.html'

@@ -36,8 +36,8 @@
             <br><br>
             <h6 class="font-weight-bold">Duration</h6>
             <div class="duration-section">
-                  <span>Start date and time: <input value="{{project.startdate}}" type="datetime-local" name="startdate" class="form-control"></span>
-                  <span>End date and time: <input value="{{project.deadline}}" type="datetime-local" name="deadline" class="form-control"></span>
+                  <span>Start date and time: <input value="{{project.startdate}}" required type="datetime-local" name="startdate" class="form-control"></span>
+                  <span>End date and time: <input required value="{{project.deadline}}" type="datetime-local" name="deadline" class="form-control"></span>
             </div>
             <div class="submit-section">
                 <input type="submit" class="btn-style-2" value="UPDATE">

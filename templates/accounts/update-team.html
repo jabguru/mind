@@ -7,7 +7,7 @@
         <form action="{% url 'update_team' team.id %}" method="POST">
           {% csrf_token %}
             <h5>Team Name</h5>
-            <input type="text" value="{{team.name}}" class="form-control field" name="name">
+            <input required type="text" value="{{team.name}}" class="form-control field" name="name">
             <br>
             <h5>Select members of team</h5>
             <table class="table">

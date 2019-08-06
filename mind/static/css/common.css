@@ -379,6 +379,10 @@ div#sidebar-wrapper{
   .projects-container {
     justify-content: center;
   }
+
+  #page-content-wrapper {
+    margin-left: 0;
+  }
 }
 
 @media (min-width: 768px) {

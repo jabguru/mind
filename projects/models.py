@@ -18,6 +18,7 @@ class Project(models.Model):
     deadline = models.DateTimeField(blank=True, null=True)
     team = models.ForeignKey(Team, on_delete=models.CASCADE, null=True, related_name='project')
     solution = models.ForeignKey(Solution, on_delete=models.CASCADE, null=True, related_name='project')
+    is_assigned = models.BooleanField(default=False, null=True)
     is_submitted = models.BooleanField(default=False, null=True)
     is_accepted = models.BooleanField(default=False, null=True)
     def __str__(self):
