@@ -16,7 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
+from django.conf.urls import handler404, handler500, handler403
 from django.conf.urls.static import static
+
+from pages import views as pages_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,3 +28,7 @@ urlpatterns = [
     path('', include('pages.urls')),
     path('projects/', include('projects.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+handler404 = pages_views.error_404
+handler500 = pages_views.error_500
+handler403 = pages_views.error_403

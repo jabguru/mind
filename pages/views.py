@@ -39,3 +39,13 @@ def notifications(request):
         'issues': issues
     }
     return render(request, 'pages/notifications.html', context)
+
+def error_404(request, exception):
+    return render(request, 'pages/error_404.html', status=404)
+
+def error_500(request):
+    data = {}
+    return render(request, 'pages/error_500.html', data)
+
+def error_403(request, exception):
+    return render(request, 'pages/error_403.html', status=403)
