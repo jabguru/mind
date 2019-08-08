@@ -95,8 +95,7 @@ def submit_project(request, project_id):
     project = get_object_or_404(Project, pk=project_id)
     if request.POST:
         utc = pytz.UTC
-        deadline = str(project.deadline)
-        deadline = datetime.strptime(deadline, '%Y-%m-%d %H:%M:%S%z')
+        deadline = project.deadline
         deadline = deadline.replace(tzinfo=utc)
         now = datetime.now()
         now = now.replace(tzinfo=utc)
